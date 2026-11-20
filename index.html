@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NAT Network Lab | Interactive Learning</title>
+<style>
+:root{--bg:#0b1220;--panel:#121d30;--panel2:#18263d;--line:#2b3c56;--text:#eaf1fb;--muted:#9fb0c8;--cyan:#52d6e8;--blue:#5795ff;--green:#54d6a0;--orange:#ffbd69;--red:#ff7885}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 15% 0%,#172d4b 0,#0b1220 42%);color:var(--text);font:15px/1.55 Inter,Segoe UI,Arial,sans-serif}
+header{padding:26px max(22px,calc((100% - 1200px)/2));border-bottom:1px solid var(--line);background:#0b1220dd;position:sticky;top:0;z-index:5;backdrop-filter:blur(12px)}
+.brand{display:flex;align-items:center;gap:12px}.logo{width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,var(--cyan),var(--blue));display:grid;place-items:center;color:#071321;font-weight:900;font-size:20px}
+h1{font-size:21px;margin:0}.sub{color:var(--muted);font-size:12px}.wrap{max-width:1200px;margin:auto;padding:24px 22px 60px}
+.hero{display:grid;grid-template-columns:1.5fr 1fr;gap:18px;margin-bottom:20px}.card{background:linear-gradient(145deg,#17263d,#111b2d);border:1px solid var(--line);border-radius:18px;padding:20px;box-shadow:0 14px 35px #0002}
+.hero h2{font-size:28px;line-height:1.2;margin:4px 0 10px}.hero p{color:var(--muted);margin:0}.pill{display:inline-block;padding:4px 9px;border-radius:99px;background:#153447;color:var(--cyan);font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.stat{background:#0c1728;border:1px solid var(--line);border-radius:12px;padding:13px}.stat b{display:block;font-size:21px;color:var(--cyan)}.stat span{font-size:11px;color:var(--muted)}
+nav{display:flex;gap:8px;flex-wrap:wrap;margin:20px 0}.tab{border:1px solid var(--line);background:#101c2e;color:var(--muted);padding:10px 14px;border-radius:10px;cursor:pointer;font-weight:650}.tab.active,.tab:hover{background:#1b3850;color:var(--cyan);border-color:#2f7187}
+.view{display:none}.view.active{display:block}.section-head{display:flex;justify-content:space-between;align-items:end;gap:12px;margin:10px 0 16px}.section-head h2{margin:0;font-size:22px}.muted{color:var(--muted)}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+h3{margin:0 0 9px;font-size:17px}.type-card{cursor:pointer;transition:.18s}.type-card:hover{transform:translateY(-2px);border-color:#3d8ba0}.type-card p,.card p{color:var(--muted)}.tag{font-size:11px;color:var(--green);font-weight:700}.diagram{background:#0a1525;border:1px solid var(--line);border-radius:14px;padding:16px;overflow:hidden}
+.flow{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}.node{flex:1;min-width:105px;text-align:center;padding:13px 8px;background:#172a43;border:1px solid #35516e;border-radius:12px}.node strong{display:block}.node small{color:var(--muted)}.arrow{color:var(--cyan);font-size:22px}
+table{width:100%;border-collapse:collapse;font-size:13px}th,td{padding:10px;text-align:left;border-bottom:1px solid var(--line)}th{color:var(--cyan);background:#14253b}td{color:#d8e4f4}.table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px}
+label{display:block;color:var(--muted);font-size:12px;margin:9px 0 5px}input,select{width:100%;padding:11px;border-radius:9px;border:1px solid var(--line);background:#0b1627;color:var(--text);outline:none}input:focus,select:focus{border-color:var(--cyan)}
+button.primary,button.secondary{padding:10px 14px;border-radius:9px;border:0;cursor:pointer;font-weight:700;margin-top:12px}.primary{background:var(--cyan);color:#071321}.secondary{background:#263b57;color:var(--text);border:1px solid var(--line)!important}
+.result{padding:13px;border-radius:10px;background:#0b1f2a;border:1px solid #236276;margin-top:12px;min-height:50px}.success{color:var(--green)}.warn{color:var(--orange)}.step{display:flex;gap:12px;margin:13px 0}.num{width:28px;height:28px;flex:none;border-radius:50%;display:grid;place-items:center;background:#1c4960;color:var(--cyan);font-weight:800}
+.quiz-q{padding:15px;border:1px solid var(--line);border-radius:12px;margin:12px 0;background:#0d192a}.option{display:block;padding:8px;margin:6px 0;background:#17263b;border-radius:8px;cursor:pointer}.option input{width:auto;margin-right:8px}
+footer{text-align:center;color:var(--muted);font-size:12px;border-top:1px solid var(--line);padding:24px}
+@media(max-width:800px){.hero,.grid2{grid-template-columns:1fr}.grid3{grid-template-columns:1fr}.hero h2{font-size:24px}.stats{grid-template-columns:repeat(3,1fr)}header{position:static}}
+</style>
+</head>
+<body>
+<header><div class="brand"><div class="logo">N</div><div><h1>NAT Network Lab</h1><div class="sub">Interactive learning • Packet translation simulator • Practice scenarios</div></div></div></header>
+<main class="wrap">
+<section class="hero">
+ <div class="card"><span class="pill">Networking fundamentals</span><h2>Understand NAT.<br><span style="color:var(--cyan)">Practice the translation.</span></h2><p>Explore Source NAT, Destination NAT, Static NAT, Dynamic NAT, DIPP/PAT and port forwarding through short lessons and hands-on exercises.</p></div>
+ <div class="card"><div class="stats"><div class="stat"><b>2</b><span>NAT directions</span></div><div class="stat"><b>5+</b><span>Lab types</span></div><div class="stat"><b>3</b><span>Real-world cases</span></div></div><p style="margin:14px 0 0">Learning path: Learn → Simulate → Check your understanding.</p></div>
+</section>
+<nav>
+<button class="tab active" data-view="overview">Overview</button><button class="tab" data-view="source">Source NAT</button><button class="tab" data-view="destination">Destination NAT</button><button class="tab" data-view="simulator">NAT Simulator</button><button class="tab" data-view="scenarios">Scenarios</button><button class="tab" data-view="quiz">Quiz</button>
+</nav>
+<section id="overview" class="view active">
+ <div class="section-head"><h2>NAT at a glance</h2><span class="muted">Start here</span></div>
+ <div class="grid2">
+  <div class="card"><span class="tag">OUTBOUND TRAFFIC</span><h3>Source NAT (SNAT)</h3><p>Translates the source address of traffic leaving a private network for the internet. Commonly used by internal users to access public services.</p><div class="diagram"><div class="flow"><div class="node">Private PC<small>192.168.1.10</small></div><div class="arrow">→</div><div class="node">Firewall<small>SNAT</small></div><div class="arrow">→</div><div class="node">Internet<small>203.0.113.1</small></div></div></div></div>
+  <div class="card"><span class="tag">INBOUND TRAFFIC</span><h3>Destination NAT (DNAT)</h3><p>Translates the destination address of traffic coming from the internet into the local private network, often to publish an internal server.</p><div class="diagram"><div class="flow"><div class="node">Internet<small>Client</small></div><div class="arrow">→</div><div class="node">Firewall<small>DNAT</small></div><div class="arrow">→</div><div class="node">Private server<small>172.16.1.10</small></div></div></div></div>
+ </div>
+ <div class="card" style="margin-top:16px"><h3>NAT types in this lesson</h3><div class="grid3">
+  <div><b>SNAT</b><p>Static (one-to-one), Dynamic IP (many-to-many), and DIPP (many-to-one using ports).</p></div>
+  <div><b>DNAT</b><p>Static DNAT (one-to-one) and Dynamic DNAT (selects a destination host).</p></div>
+  <div><b>Port translation</b><p>Port forwarding maps a public IP and port to an internal IP and port.</p></div>
+ </div></div>
+</section>
+<section id="source" class="view">
+ <div class="section-head"><h2>Source NAT (SNAT)</h2><span class="muted">Private network → Internet</span></div>
+ <div class="grid3">
+  <div class="card type-card"><span class="tag">ONE-TO-ONE</span><h3>Static NAT</h3><p>Permanent mapping of one private IP to one public IP. Useful for hosts that need a consistent public address.</p><b>192.168.1.10 → 203.0.113.1</b></div>
+  <div class="card type-card"><span class="tag">MANY-TO-MANY</span><h3>Dynamic NAT</h3><p>Allocates public IPs from a predefined pool. Typically, each active translation needs a public IP.</p><b>Private IP → available pool IP</b></div>
+  <div class="card type-card"><span class="tag">MANY-TO-ONE</span><h3>DIPP / PAT</h3><p>Many private hosts share one or more public IPs. Source port numbers distinguish connections.</p><b>IP + port → public IP + port</b></div>
+ </div>
+ <div class="card" style="margin-top:16px"><h3>Static bidirectional NAT</h3><p>A permanent one-to-one mapping can support connections initiated in both directions. The firewall still needs a security policy permitting inbound traffic.</p><div class="diagram"><div class="flow"><div class="node">Internal host<small>192.168.1.10</small></div><div class="arrow">⇄</div><div class="node">Fixed mapping<small>203.0.113.10</small></div><div class="arrow">⇄</div><div class="node">External host<small>Internet</small></div></div></div><p class="muted">Dynamic NAT is different: its translation is created dynamically and may expire when the session ends, so the public IP is not a reliable inbound destination for the original host.</p></div>
+</section>
+<section id="destination" class="view">
+ <div class="section-head"><h2>Destination NAT (DNAT)</h2><span class="muted">Internet → Private network</span></div>
+ <div class="grid2">
+  <div class="card"><h3>Static DNAT (1:1)</h3><p>Maps one public IP address to one internal private IP address. Common examples include web, mail and application servers.</p><div class="result"><b>Example</b><br>13.1.1.10 → 172.16.1.10</div></div>
+  <div class="card"><h3>Static PAT / Port forwarding</h3><p>Maps a public IP and port to an internal IP and port. The external and internal port numbers can differ.</p><div class="result"><b>Example</b><br>13.1.1.10:443 → 172.16.1.10:22</div></div>
+ </div>
+ <div class="card" style="margin-top:16px"><h3>Dynamic DNAT</h3><p>Translates the original destination address to a destination host that may have a DHCP-assigned IP. The lesson notes FQDN, address object or address group as possible translated-address references.</p><h3 style="margin-top:16px">Session distribution methods</h3><div class="table-wrap"><table><tr><th>Method</th><th>How it selects a server</th></tr><tr><td>Round Robin</td><td>Distributes sessions sequentially among available servers.</td></tr><tr><td>Source IP Hash</td><td>Routes traffic from the same source IP to the same server.</td></tr><tr><td>IP Modulo</td><td>Uses an IP address calculation to select a destination.</td></tr><tr><td>IP Hash</td><td>Uses IP address hashing to select a destination.</td></tr><tr><td>Least Sessions</td><td>Selects the server with the fewest active sessions.</td></tr></table></div><p class="muted">The supplied notes say “4 main types” but list Static DNAT and Dynamic DNAT. This lab presents the two types actually named in the notes.</p></div>
+</section>
+<section id="simulator" class="view">
+ <div class="section-head"><h2>Interactive NAT simulator</h2><span class="muted">Use example addresses or enter your own</span></div>
+ <div class="grid2">
+  <div class="card">
+   <label for="mode">Translation mode</label><select id="mode"><option value="snat">Source NAT — Static</option><option value="dynamic">Source NAT — Dynamic IP pool</option><option value="dipp">Source NAT — DIPP / PAT</option><option value="dnat">Destination NAT — Static</option><option value="pat">Destination NAT — Port forwarding</option></select>
+   <div id="fields"></div><button class="primary" id="run">Translate packet</button><button class="secondary" id="reset">Reset example</button>
+  </div>
+  <div class="card"><h3>Packet translation result</h3><div id="result" class="result">Choose a mode, review the values, then click <b>Translate packet</b>.</div><div style="margin-top:15px"><h3>What changed?</h3><p id="explain" class="muted">The simulator will explain which packet field is translated.</p></div></div>
+ </div>
+ <div class="card" style="margin-top:16px"><h3>Important port ranges</h3><div class="table-wrap"><table><tr><th>Range</th><th>Classification</th><th>Examples / use</th></tr><tr><td>0–1023</td><td>Well-known</td><td>HTTP, HTTPS, SSH, DNS</td></tr><tr><td>1024–49151</td><td>Registered</td><td>Applications and services</td></tr><tr><td>49152–65535</td><td>Dynamic / private</td><td>Temporary client connections</td></tr></table></div><p class="muted">TCP and UDP port numbers are 16-bit values (0–65535). The supplied notes estimate about 64,000 concurrent sessions per public IP for DIPP and give: Concurrent Sessions = Oversubscription Rate × Public IP Pool Size.</p></div>
+</section>
+<section id="scenarios" class="view">
+ <div class="section-head"><h2>Real-world practice scenarios</h2><span class="muted">Think like a network engineer</span></div>
+ <div class="grid3">
+  <div class="card"><span class="tag">SCENARIO 01</span><h3>500 users, one public IP</h3><p><b>Problem:</b> A company has 500 users but only one public IP for internet access.</p><p><b>Solution:</b> Use DIPP NAT so multiple private IPs share a public IP using different source ports.</p></div>
+  <div class="card"><span class="tag">SCENARIO 02</span><h3>Publish a web server</h3><p><b>Problem:</b> An internal web server must be reachable from the internet.</p><p><b>Solution:</b> Use Static NAT with a public IP and allow the required HTTP/HTTPS traffic in the security policy.</p></div>
+  <div class="card"><span class="tag">SCENARIO 03</span><h3>VoIP port changes</h3><p><b>Problem:</b> SIP calls drop because source ports change.</p><p><b>Solution:</b> The notes recommend Dynamic IP (without port translation) to retain original ports.</p></div>
+ </div>
+ <div class="card" style="margin-top:16px"><h3>Quick design question</h3><p>A company wants users to browse the internet through one public IP. Which NAT method best matches the requirement?</p><button class="secondary" onclick="document.getElementById('scenarioAnswer').hidden=false">Reveal answer</button><p id="scenarioAnswer" class="success" hidden><b>DIPP / PAT.</b> It translates multiple private IP addresses to one or more public IPs and uses source ports to distinguish connections.</p></div>
+</section>
+<section id="quiz" class="view">
+ <div class="section-head"><h2>Knowledge check</h2><span class="muted">5 questions</span></div>
+ <div id="questions"></div><button class="primary" id="grade">Check answers</button><div id="score" class="result" aria-live="polite">Select one answer for each question.</div>
+</section>
+</main>
+<footer>Built as a static GitHub Pages learning lab • Based on the uploaded NAT (Network Address Translation) notes • Use documentation and a controlled lab for production configuration.</footer>
+<script>
+const tabs=[...document.querySelectorAll('.tab')];tabs.forEach(b=>b.addEventListener('click',()=>{tabs.forEach(x=>x.classList.toggle('active',x===b));document.querySelectorAll('.view').forEach(v=>v.classList.toggle('active',v.id===b.dataset.view));}));
+const examples={
+snat:{src:'192.168.1.10',dst:'8.8.8.8',pub:'203.0.113.1',sport:'51500',dport:'443'},
+dynamic:{src:'192.168.1.20',dst:'8.8.8.8',pub:'203.0.113.3',sport:'51501',dport:'443'},
+dipp:{src:'192.168.1.10',dst:'8.8.8.8',pub:'203.0.113.10',sport:'51500',translated:'40001',dport:'443'},
+dnat:{src:'198.51.100.22',dst:'13.1.1.10',inside:'172.16.1.10',dport:'443'},
+pat:{src:'198.51.100.22',dst:'13.1.1.10',inside:'172.16.1.10',dport:'443',insidePort:'22'}
+};
+const mode=document.getElementById('mode'),fields=document.getElementById('fields');
+function field(id,label,value){return `<label for="${id}">${label}</label><input id="${id}" value="${value}">`}
+function drawFields(){let m=mode.value,e=examples[m];let s='';
+if(['snat','dynamic','dipp'].includes(m)){s=field('src','Original private source IP',e.src)+field('dst','Destination IP',e.dst)+field('pub','Translated public IP',e.pub)+field('sport','Original source port',e.sport)+field('dport','Destination port',e.dport);if(m==='dipp')s+=field('translated','Translated source port',e.translated);}
+else{s=field('src','External source IP',e.src)+field('dst','Public destination IP',e.dst)+field('inside','Translated internal server IP',e.inside)+field('dport','Public destination port',e.dport);if(m==='pat')s+=field('insidePort','Internal server port',e.insidePort);}
+fields.innerHTML=s;document.getElementById('result').innerHTML='Ready to translate.';document.getElementById('explain').textContent='Click Translate packet to see the before-and-after packet fields.'}
+mode.addEventListener('change',drawFields);drawFields();
+document.getElementById('reset').onclick=drawFields;
+document.getElementById('run').onclick=()=>{let v=id=>document.getElementById(id).value.trim(),m=mode.value,res='',ex='';
+if(['snat','dynamic','dipp'].includes(m)){let afterPort=m==='dipp'?v('translated'):v('sport');res=`<b>Before (outbound)</b><br>Source: ${v('src')}:${v('sport')}<br>Destination: ${v('dst')}:${v('dport')}<hr><b>After NAT</b><br>Source: ${v('pub')}:${afterPort}<br>Destination: ${v('dst')}:${v('dport')}`;ex=m==='dipp'?'SNAT changes the source IP and source port. The port helps distinguish multiple private clients sharing a public IP.':m==='dynamic'?'SNAT changes the private source IP to an available address from the public IP pool. The source port is retained in this simplified example.':'Static SNAT replaces the private source IP with its fixed public mapping. The source port is retained.'}
+else{let port=m==='pat'?v('insidePort'):v('dport');res=`<b>Before (inbound)</b><br>Source: ${v('src')}<br>Destination: ${v('dst')}:${v('dport')}<hr><b>After DNAT</b><br>Source: ${v('src')}<br>Destination: ${v('inside')}:${port}`;ex=m==='pat'?'DNAT changes the public destination IP and port to the internal server IP and port.':'DNAT changes the public destination IP to the private server IP. The destination port remains the same in this example.'}
+document.getElementById('result').innerHTML=res;document.getElementById('explain').textContent=ex;};
+const qs=[
+['Which NAT translates the source address of outbound traffic?',['Destination NAT','Source NAT','Port forwarding'],1],
+['Which method allows many private hosts to share a public IP using ports?',['Static NAT','DIPP / PAT','Dynamic NAT without port translation'],1],
+['What does static one-to-one NAT provide?',['A permanent private-to-public IP mapping','A changing pool address','Only port translation'],0],
+['What is the purpose of destination NAT?',['Translate source address on outbound traffic','Translate inbound destination toward an internal host','Encrypt traffic'],1],
+['Which DNAT distribution method selects the server with the fewest active sessions?',['Round Robin','Source IP Hash','Least Sessions'],2]
+];
+document.getElementById('questions').innerHTML=qs.map((q,i)=>`<div class="quiz-q"><b>${i+1}. ${q[0]}</b>${q[1].map((o,j)=>`<label class="option"><input type="radio" name="q${i}" value="${j}">${o}</label>`).join('')}</div>`).join('');
+document.getElementById('grade').onclick=()=>{let n=0,answered=0;qs.forEach((q,i)=>{let a=document.querySelector(`input[name="q${i}"]:checked`);if(a){answered++;if(+a.value===q[2])n++;}});document.getElementById('score').innerHTML=answered<qs.length?`Please answer all ${qs.length} questions. You answered ${answered}.`:`<b>Your score: ${n}/${qs.length}</b> — ${n===qs.length?'Excellent work!':'Review the lessons and try again.'}`;};
+</script>
+</body></html>
